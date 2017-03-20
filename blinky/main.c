@@ -4,7 +4,7 @@
 // For defines for GPIO ports see 157 and table 1 (pg 46) on reference manual
 #define GPIOA_MODER 0x48000000
 #define RCC_CNTRL 0x40021000
-#define GPIO_CLK_ENABLE RCC_CNTRL+0x14
+#define GPIO_CLK_ENABLE (RCC_CNTRL+0x14)
 
 // Reset value, see 157
 #define GPIOA_MODER_RESET 0x28000000
@@ -24,15 +24,11 @@ typedef struct {
     volatile unsigned BRR;       //0x28
 } GPIOStruct;
 
-
-inline unsigned get32(unsigned *addr) { return *in; }
-inline void set32(unsigned *addr, unsigned val) { *addr = val; }
-
 void main() {
     GPIOStruct *gpioa = ((GPIOStruct *)GPIOA_MODER);
 
     // Set GPIO clock for GPIOA
-    *((unsigned *)(RCC_CNTRL + 0x14)) |= 1<<17;    
+    *((unsigned *)GPIO_CLK_ENABLE) |= 1<<17;    
     
     // Set up pin A4 (pg 157)
     gpioa->MODER    &= ~(3<<8); // Reset pin mode
