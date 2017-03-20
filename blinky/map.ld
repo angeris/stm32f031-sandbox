@@ -1,4 +1,4 @@
-/* This is as given in pg 45 in the manual. */
+/* This is as given in pg 45 in the reference manual. */
 
 MEMORY
 {
