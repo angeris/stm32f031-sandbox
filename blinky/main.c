@@ -2,7 +2,7 @@
 // vector mappings see pg 24 on programming manual (map.ld and helper.s, correspondingly)
 
 // For defines for GPIO ports see 157 and table 1 (pg 46) on reference manual
-#define GPIOA_MODER 0x48000000
+#define GPIOA_BASE 0x48000000
 #define RCC_CNTRL 0x40021000
 #define GPIO_CLK_ENABLE (RCC_CNTRL+0x14)
 
@@ -25,7 +25,7 @@ typedef struct {
 } GPIOStruct;
 
 void main() {
-    GPIOStruct *gpioa = ((GPIOStruct *)GPIOA_MODER);
+    GPIOStruct *gpioa = ((GPIOStruct *)GPIOA_BASE);
 
     // Set GPIO clock for GPIOA
     *((unsigned *)GPIO_CLK_ENABLE) |= 1<<17;    
