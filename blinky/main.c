@@ -3,7 +3,10 @@
 
 // For defines for GPIO ports see 157 and table 1 (pg 46) on reference manual
 #define GPIOA_BASE 0x48000000
+
+// For general RCC control see page 108
 #define RCC_CNTRL 0x40021000
+// For GPIO clock see page 120
 #define GPIO_CLK_ENABLE (RCC_CNTRL+0x14)
 
 // Reset value, see 157
