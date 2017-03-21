@@ -32,4 +32,6 @@
 *.dSYM/
 *.su
 
+*.bin*
+
 .DS_Store

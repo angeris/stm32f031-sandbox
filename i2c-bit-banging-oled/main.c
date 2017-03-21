@@ -13,15 +13,17 @@ unsigned char display_buf[BUF_SIZE];
 // Status LED is on P4
 // SDA is on P1
 // SCL is on P0
+// Overall, note that the SSD1306 is fast enough such that we
+// don't have to worry about delays and such on the pins.
 void i2c_init() {
     PERIPHERAL_CLOCK |= 1<<17; // Enable GPIOA
 
     // Enable P0, P1, P4 output
-    GPIOA->MODER    &= ~(3<<0 | 3<<2 | 3<<8);
-    GPIOA->MODER    |=  (1<<0 | 1<<2 | 1<<8);
-    GPIOA->OTYPER   &= ~(1<<0 | 1<<1 | 1<<4);
-    GPIOA->OSPEEDR  |=  (3<<0 | 3<<2 | 3<<8);
-    GPIOA->PUPDR    &= ~(3<<0 | 3<<2 | 3<<8);
+    GPIOA->MODER    &= ~(3<<0 | 3<<2);
+    GPIOA->MODER    |=  (1<<0 | 1<<2);
+    GPIOA->OTYPER   &= ~(1<<0 | 1<<1);
+    GPIOA->OSPEEDR  |=  (3<<0 | 3<<2);
+    GPIOA->PUPDR    &= ~(3<<0 | 3<<2);
 }
 inline void scl_set() {
     GPIOA->BSRR = 1;
@@ -80,7 +82,6 @@ void i2c_command(unsigned command) {
     i2c_start();
     if(i2c_write(I2C_ADDR<<1)) {
         i2c_end();
-        GPIOA->BSRR = 1<<4; // Turn on LED
         return;
     }
     i2c_write(0x00);
@@ -91,7 +92,6 @@ void i2c_data(unsigned data) {
     i2c_start();
     if(i2c_write(I2C_ADDR<<1)) {
         i2c_end();
-        GPIOA->BSRR = 1<<4; // Turn on LED
         return;
     }
     i2c_write(0x40);
@@ -102,7 +102,6 @@ void i2c_start_addr() {
     i2c_start();
     if(i2c_write(I2C_ADDR<<1)) {
         i2c_end();
-        GPIOA->BSRR = 1<<4; // Turn on LED
         return;
     }
 }
@@ -127,7 +126,7 @@ void flush_display() {
 void _set_px(unsigned x, unsigned y) { // Unsafe af
     display_buf[((y >> 3) << 7) + x] |= 1<<(y&7);
 }
-void _clr_px(unsigned x, unsigned y) {
+void _clr_px(unsigned x, unsigned y) { // Also unsafe af
     display_buf[((y >> 3) << 7) + x] &= ~(1<<(y&7));
 }
 void clear_all() {
