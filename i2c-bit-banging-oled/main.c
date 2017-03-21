@@ -124,6 +124,16 @@ void flush_display() {
         i2c_end();
     }
 }
+void _set_px(unsigned x, unsigned y) { // Unsafe af
+    display_buf[((y >> 3) << 7) + x] |= 1<<(y&7);
+}
+void _clr_px(unsigned x, unsigned y) {
+    display_buf[((y >> 3) << 7) + x] &= ~(1<<(y&7));
+}
+void clear_all() {
+    unsigned i;
+    for(i=0; i<BUF_SIZE; i++) display_buf[i] = 0;
+}
 
 void main() {
     i2c_init();
@@ -173,12 +183,12 @@ void main() {
     
     i2c_command(0xaf);
 
-    while(1) {
-        for(i=0; i<BUF_SIZE; i++) display_buf[i] = 0;
-        flush_display();
-        for(i=0; i<1000000; i++) asm("nop");
-        for(i=0; i<BUF_SIZE; i++) display_buf[i] = 0xFF;
-        flush_display();
-        for(i=0; i<1000000; i++) asm("nop");
+    clear_all();
+    flush_display();
+
+    for(i=0; i<196; i++) {
+        _set_px((i*42800)>>16, (i*21400)>>16);
     }
+
+    flush_display(); 
 }
