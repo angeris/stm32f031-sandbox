@@ -10,5 +10,5 @@ SECTIONS
 {
     .text   : {*(.text*)}   > flash
     .rodata : {*(.rodata*)} > flash
-    .bss    : {*(.bss*)}    > flash
+    .bss    : {*(.bss*)}    > sram
 }
