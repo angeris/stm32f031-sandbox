@@ -107,22 +107,21 @@ void i2c_start_addr() {
     }
 }
 void flush_display() {
-    // i2c_command(0x21);
-    // i2c_command(0);
-    // i2c_command(127);
+    i2c_command(0x21);
+    i2c_command(0);
+    i2c_command(127);
 
-    // i2c_command(0x22);
-    // i2c_command(0);
-    // i2c_command(7);
+    i2c_command(0x22);
+    i2c_command(0);
+    i2c_command(7);
 
     unsigned i=0;
     unsigned j=0;
-    unsigned k=0;
-    for(i=0; i<8; i++) {
-        i2c_command(0xb0 | (i&7));
-        i2c_command(0x00);
-        i2c_command(0x10);
-        for(j=0; j<0x80; j++) i2c_data(display_buf[k++]);
+    while(i<BUF_SIZE) {
+        i2c_start_addr();
+        i2c_write(0x40);
+        for(j=0; j<16; j++) i2c_write(display_buf[i++]);
+        i2c_end();
     }
 }
 
