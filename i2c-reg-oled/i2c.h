@@ -15,4 +15,3 @@ typedef struct {
 } I2CStruct;
 
 #define I2C ((I2CStruct *)I2C_BASE)
-

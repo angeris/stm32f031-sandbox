@@ -15,7 +15,7 @@ typedef struct {
     volatile unsigned BSRR;      //0x18
     volatile unsigned LCKR;      //0x1c
     volatile unsigned AFRL;      //0x20
-    volatile unsigned AFHR;      //0x24
+    volatile unsigned AFRH;      //0x24
     volatile unsigned BRR;       //0x28
 } GPIOStruct;
 
